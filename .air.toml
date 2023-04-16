@@ -1,0 +1,3 @@
+[build]
+cmd = "/usr/bin/make install"
+bin = "/usr/bin/true"
