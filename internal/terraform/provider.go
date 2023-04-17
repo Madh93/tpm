@@ -3,7 +3,10 @@ package terraform
 import (
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
+	"regexp"
+	"runtime"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -68,6 +71,31 @@ func NewProvider(name *ProviderName, os, arch string) *Provider {
 		operatingSystem: strings.ToLower(os),
 		architecture:    strings.ToLower(arch),
 	}
+}
+
+func ParseProviderFromPath(path string) (*Provider, error) {
+	// Get parts
+	parts := strings.Split(path, string(os.PathSeparator))
+
+	// Verify path format
+	pattern := `^.*\/[^\/]+\/[^\/]+\/[^\/]+\/\d+\.\d+\.\d+\/[^_]+_[^\/]+$`
+	match, err := regexp.MatchString(pattern, path)
+	if err != nil {
+		return nil, err
+	}
+	if !match && runtime.GOOS != "windows" {
+		return nil, errors.New("invalid path format, expected something like '.../<namespace>/<type>/<version>/<os>_<arch>'")
+	}
+
+	// Get provider data
+	os := strings.Split(parts[len(parts)-1], "_")[0]
+	arch := strings.Split(parts[len(parts)-1], "_")[1]
+	version := parts[len(parts)-2]
+	providerType := parts[len(parts)-3]
+	namespace := parts[len(parts)-4]
+
+	providerName := NewProviderName(namespace, providerType, version)
+	return NewProvider(providerName, os, arch), nil
 }
 
 func (p *Provider) Namespace() string {

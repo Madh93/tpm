@@ -12,7 +12,7 @@ import (
 var purgeCmd = &cobra.Command{
 	Use:     "purge",
 	Aliases: []string{"p"},
-	Short:   "Purge ALL installed providers",
+	Short:   "Purge all installed providers",
 	Run: func(cmd *cobra.Command, args []string) {
 		skipConfirmation := getBoolFlag(cmd, "yes")
 
