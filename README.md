@@ -44,6 +44,7 @@ Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   install     Install a provider
+  purge       Purge ALL installed providers
   uninstall   Uninstall a provider
 
 Flags:
