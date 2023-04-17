@@ -65,6 +65,8 @@ func initConfig() {
 			log.Println("Using config file:", viper.ConfigFileUsed())
 		}
 	} else {
-		log.Fatalln("Error reading config file,", err)
+		if viper.GetBool("debug") {
+			log.Println("Error reading config file,", err)
+		}
 	}
 }
