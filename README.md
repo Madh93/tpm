@@ -44,6 +44,7 @@ Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   install     Install a provider
+  uninstall   Uninstall a provider
 
 Flags:
   -c, --config string                       config file for tpm
@@ -57,3 +58,5 @@ Use "tpm [command] --help" for more information about a command.
 ```
 
 ## License
+
+This project is licensed under the [MIT license](LICENSE).
