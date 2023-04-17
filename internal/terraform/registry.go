@@ -1,0 +1,99 @@
+package terraform
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/spf13/viper"
+)
+
+type Registry struct {
+	baseURL string
+}
+
+func NewRegistry(hostname string) *Registry {
+	return &Registry{
+		baseURL: fmt.Sprintf("https://%s/v1/providers", hostname),
+	}
+}
+
+func (r Registry) String() string {
+	return fmt.Sprintf("'%s'", r.baseURL)
+}
+
+type GetVersionsResponse struct {
+	Versions []struct {
+		Version   string   `json:"version"`
+		Protocols []string `json:"protocols"`
+		Platforms []struct {
+			OS   string `json:"os"`
+			Arch string `json:"arch"`
+		} `json:"platforms"`
+	} `json:"versions"`
+}
+
+func (r *Registry) GetVersions(provider *Provider) (*GetVersionsResponse, error) {
+	url := fmt.Sprintf("%s/%s/%s/versions", r.baseURL, provider.Namespace(), provider.ProviderType())
+	resp, err := http.Get(url)
+
+	if viper.GetBool("debug") {
+		log.Printf("Requesting the next url: '%s' \n", url)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var versionsResp GetVersionsResponse
+	err = json.NewDecoder(resp.Body).Decode(&versionsResp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &versionsResp, nil
+}
+
+type GetPackageResponse struct {
+	Protocols           []string `json:"protocols"`
+	OS                  string   `json:"os"`
+	Arch                string   `json:"arch"`
+	Filename            string   `json:"filename"`
+	DownloadURL         string   `json:"download_url"`
+	SHASumsURL          string   `json:"shasums_url"`
+	SHASumsSignatureURL string   `json:"shasums_signature_url"`
+	SHASum              string   `json:"shasum"`
+	SigningKeys         struct {
+		GPGPublicKeys []struct {
+			KeyID          string `json:"key_id"`
+			ASCIIArmor     string `json:"ascii_armor"`
+			TrustSignature string `json:"trust_signature"`
+			Source         string `json:"source"`
+			SourceURL      string `json:"source_url"`
+		} `json:"gpg_public_keys"`
+	} `json:"signing_keys"`
+}
+
+func (r *Registry) GetPackage(provider *Provider) (*GetPackageResponse, error) {
+	url := fmt.Sprintf("%s/%s/%s/%s/download/%s/%s", r.baseURL, provider.Namespace(), provider.ProviderType(), provider.Version(), provider.OperatingSystem(), provider.Architecture())
+	resp, err := http.Get(url)
+
+	if viper.GetBool("debug") {
+		log.Printf("Requesting the next url: '%s' \n", url)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var packageResp GetPackageResponse
+	err = json.NewDecoder(resp.Body).Decode(&packageResp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &packageResp, nil
+}

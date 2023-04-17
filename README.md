@@ -38,14 +38,22 @@ Terraform Provider Manager is a simple CLI to manage Terraform providers in the 
 
 Usage:
   tpm [flags]
+  tpm [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  install     Install a provider
 
 Flags:
   -c, --config string                       config file for tpm
   -d, --debug                               enable debug mode
   -h, --help                                help for tpm
-  -p, --terraform-plugin-cache-dir string   the location of the Terraform plugin cache directory (default "/home/migue/.terraform.d/plugin-cache")
+  -p, --terraform-plugin-cache-dir string   the location of the Terraform plugin cache directory (default "/home/user/.terraform.d/plugin-cache")
   -r, --terraform-registry string           the Terraform registry provider hostname (default "registry.terraform.io")
   -v, --version                             version for tpm
+
+Use "tpm [command] --help" for more information about a command.
 ```
 
 ## License
