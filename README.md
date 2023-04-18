@@ -15,6 +15,15 @@ Terraform Provider Manager (`tpm`) is a command-line interface (CLI) tool design
 
 ## Installation
 
+### From releases
+
+Stable binaries are available on the [releases page](https://github.com/Madh93/tpm/releases). To install, download the binary for your platform from "Assets", extract the downloaded file and place `tpm` into your `PATH`:
+
+```shell
+curl -L https://github.com/Madh93/tpm/releases/download/v0.1.0/tpm_$(uname -s)_$(uname -m).tar.gz | tar -xz -O tpm > /usr/local/bin/tpm
+chmod +x /usr/local/bin/tpm
+```
+
 ### From source
 
 Install Go if it is not already installed. You can download it from the official [website](https://golang.org/dl).
