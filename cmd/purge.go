@@ -19,7 +19,7 @@ var purgeCmd = &cobra.Command{
 		// Request user confirmation
 		if !skipConfirmation {
 			// Read user input
-			log.Print("Are you sure you want to purge ALL installed providers? (yes/no)")
+			fmt.Print("Are you sure you want to purge ALL installed providers? (yes/no)")
 			var confirmation string
 			_, err := fmt.Scanln(&confirmation)
 			if err != nil {
@@ -27,7 +27,7 @@ var purgeCmd = &cobra.Command{
 			}
 			// Parse user input
 			if strings.ToLower(confirmation) != "yes" && strings.ToLower(confirmation) != "y" {
-				log.Println("Operation cancelled.")
+				fmt.Println("Operation cancelled.")
 				return
 			}
 		}

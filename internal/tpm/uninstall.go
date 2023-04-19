@@ -1,6 +1,7 @@
 package tpm
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func Uninstall(provider *terraform.Provider) (err error) {
-	log.Printf("Uninstalling %s...\n", provider)
+	fmt.Printf("Uninstalling %s...\n", provider)
 
 	var installationPath = provider.InstallationPath()
 	if viper.GetBool("debug") {
@@ -18,7 +19,7 @@ func Uninstall(provider *terraform.Provider) (err error) {
 
 	// Check provider already exists
 	if _, err = os.Stat(installationPath); os.IsNotExist(err) {
-		log.Printf("%s not found! Ignoring...\n", provider)
+		fmt.Printf("%s not found! Ignoring...\n", provider)
 		return nil
 	}
 
@@ -28,7 +29,7 @@ func Uninstall(provider *terraform.Provider) (err error) {
 		return
 	}
 
-	log.Printf("%s has been uninstalled sucessfully!\n", provider)
+	fmt.Printf("%s has been uninstalled sucessfully!\n", provider)
 
 	return nil
 }

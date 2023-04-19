@@ -1,6 +1,7 @@
 package tpm
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -12,12 +13,12 @@ import (
 )
 
 func Install(provider *terraform.Provider, force bool) (err error) {
-	log.Printf("Installing %s...\n", provider)
+	fmt.Printf("Installing %s...\n", provider)
 
 	// Check provider already exists
 	if !force {
 		if _, err = os.Stat(provider.InstallationPath()); !os.IsNotExist(err) {
-			log.Printf("Provider already exists in '%s' directory! Use '--force' to reinstall\n", provider.InstallationPath())
+			fmt.Printf("Provider already exists in '%s' directory! Use '--force' to reinstall\n", provider.InstallationPath())
 			return nil
 		}
 	}
@@ -34,13 +35,13 @@ func Install(provider *terraform.Provider, force bool) (err error) {
 		return
 	}
 
-	log.Printf("%s has been installed sucessfully!\n", provider)
+	fmt.Printf("%s has been installed sucessfully!\n", provider)
 
 	return nil
 }
 
 func downloadProvider(provider *terraform.Provider) (filename string, err error) {
-	log.Println("Downloading...")
+	fmt.Println("Downloading...")
 
 	// Create Temporary file
 	file, err := os.CreateTemp("", "")
@@ -84,7 +85,7 @@ func downloadProvider(provider *terraform.Provider) (filename string, err error)
 }
 
 func extractProvider(provider *terraform.Provider, filename string) (err error) {
-	log.Println("Extracting...")
+	fmt.Println("Extracting...")
 
 	destinationDir := provider.InstallationPath()
 

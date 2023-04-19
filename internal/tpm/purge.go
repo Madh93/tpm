@@ -1,6 +1,7 @@
 package tpm
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -9,7 +10,7 @@ import (
 )
 
 func Purge() (err error) {
-	log.Println("Removing all providers...")
+	fmt.Println("Removing all providers...")
 
 	registryPath := filepath.Join(
 		viper.GetString("terraform_plugin_cache_dir"),
@@ -22,7 +23,7 @@ func Purge() (err error) {
 
 	// Check provider already exists
 	if _, err = os.Stat(registryPath); os.IsNotExist(err) {
-		log.Printf("Registry path under '%s' does not exist! Ignoring...\n", registryPath)
+		fmt.Printf("Registry path under '%s' does not exist! Ignoring...\n", registryPath)
 		return nil
 	}
 
@@ -32,7 +33,7 @@ func Purge() (err error) {
 		return
 	}
 
-	log.Println("All providers were removed sucessfully!")
+	fmt.Println("All providers were removed sucessfully!")
 
 	return nil
 }
