@@ -36,12 +36,12 @@ type GetVersionsResponse struct {
 
 func (r *Registry) GetVersions(provider *Provider) (*GetVersionsResponse, error) {
 	url := fmt.Sprintf("%s/%s/%s/versions", r.baseURL, provider.Namespace(), provider.ProviderType())
-	resp, err := http.Get(url)
 
 	if viper.GetBool("debug") {
 		log.Printf("Requesting the next url: '%s' \n", url)
 	}
 
+	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -78,17 +78,28 @@ type GetPackageResponse struct {
 
 func (r *Registry) GetPackage(provider *Provider) (*GetPackageResponse, error) {
 	url := fmt.Sprintf("%s/%s/%s/%s/download/%s/%s", r.baseURL, provider.Namespace(), provider.ProviderType(), provider.Version(), provider.OperatingSystem(), provider.Architecture())
-	resp, err := http.Get(url)
 
 	if viper.GetBool("debug") {
 		log.Printf("Requesting the next url: '%s' \n", url)
 	}
 
+	// Get request
+	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
+	switch resp.StatusCode {
+	case 200:
+		break
+	case 404:
+		return nil, fmt.Errorf("provider not found")
+	default:
+		return nil, fmt.Errorf("unable to download provider: %q", resp.Status)
+	}
+
+	// Parse response
 	var packageResp GetPackageResponse
 	err = json.NewDecoder(resp.Body).Decode(&packageResp)
 	if err != nil {
