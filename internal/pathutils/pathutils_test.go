@@ -39,6 +39,6 @@ func TestPathDepth(t *testing.T) {
 
 	for _, tc := range tests {
 		got := PathDepth(tc.path)
-		assert.Equal(t, got, tc.expected)
+		assert.Equal(t, tc.expected, got)
 	}
 }

@@ -8,6 +8,46 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestGetVersions(t *testing.T) {
+	tests := []struct {
+		name       string
+		mockServer *httptest.Server
+		provider   *Provider
+		wantErr    bool
+	}{
+		{
+			name:       "valid versions",
+			mockServer: makeValidVersionsServer(),
+			provider:   NewProvider(NewProviderName("hashicorp", "null", "3.2.1"), "linux", "amd64"),
+			wantErr:    false,
+		},
+		{
+			name:       "package not found",
+			mockServer: makeNotFoundServer(),
+			provider:   NewProvider(NewProviderName("hashiwhat", "idontexist", "0.0.0"), "linux", "amd64"),
+			wantErr:    true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := tt.mockServer
+			defer server.Close()
+
+			registry := Registry{baseURL: server.URL}
+			versions, err := registry.GetVersions(tt.provider)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.Nil(t, versions)
+			} else {
+				assert.NoError(t, err)
+				assert.NotZero(t, len(versions))
+			}
+		})
+	}
+}
+
 func TestGetPackage(t *testing.T) {
 	tests := []struct {
 		name       string
@@ -46,6 +86,30 @@ func TestGetPackage(t *testing.T) {
 			}
 		})
 	}
+}
+
+func makeValidVersionsServer() *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{
+			"id": "hashicorp/null",
+			"versions": [
+				{
+					"version": "3.2.1",
+					"protocols": [
+						"5.0"
+					],
+					"platforms": [
+						{
+							"os": "linux",
+							"arch": "amd64"
+						}
+					]
+				}
+			],
+			"warnings": null
+		}`))
+	}))
 }
 
 func makeValidServer() *httptest.Server {

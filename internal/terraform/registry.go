@@ -24,36 +24,40 @@ func (r Registry) String() string {
 }
 
 type GetVersionsResponse struct {
-	Versions []struct {
-		Version   string   `json:"version"`
-		Protocols []string `json:"protocols"`
-		Platforms []struct {
-			OS   string `json:"os"`
-			Arch string `json:"arch"`
-		} `json:"platforms"`
-	} `json:"versions"`
+	Versions ProviderVersions `json:"versions"`
 }
 
-func (r *Registry) GetVersions(provider *Provider) (*GetVersionsResponse, error) {
+func (r *Registry) GetVersions(provider *Provider) (ProviderVersions, error) {
 	url := fmt.Sprintf("%s/%s/%s/versions", r.baseURL, provider.Namespace(), provider.ProviderType())
 
 	if viper.GetBool("debug") {
 		log.Printf("Requesting the next url: '%s' \n", url)
 	}
 
+	// Get request
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
+	switch resp.StatusCode {
+	case 200:
+		break
+	case 404:
+		return nil, fmt.Errorf("provider not found")
+	default:
+		return nil, fmt.Errorf("unable to get provider versions: %q", resp.Status)
+	}
+
+	// Parse response
 	var versionsResp GetVersionsResponse
 	err = json.NewDecoder(resp.Body).Decode(&versionsResp)
 	if err != nil {
 		return nil, err
 	}
 
-	return &versionsResp, nil
+	return versionsResp.Versions, nil
 }
 
 type GetPackageResponse struct {

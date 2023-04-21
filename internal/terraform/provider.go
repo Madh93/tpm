@@ -110,6 +110,10 @@ func (p *Provider) Version() string {
 	return p.name.version
 }
 
+func (p *Provider) SetVersion(version string) {
+	p.name.version = version
+}
+
 func (p *Provider) OperatingSystem() string {
 	return p.operatingSystem
 }

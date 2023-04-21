@@ -15,10 +15,24 @@ import (
 func Install(provider *terraform.Provider, force bool) (err error) {
 	fmt.Printf("Installing %s...\n", provider)
 
+	// Setup registry
+	registry = terraform.NewRegistry(viper.GetString("terraform_registry"))
+
+	// Set latest version
+	if provider.Version() == "latest" {
+		err := setLatestProviderVersion(provider)
+		if err != nil {
+			return err
+		}
+	}
+
 	// Check provider already exists
 	if !force {
 		if _, err = os.Stat(provider.InstallationPath()); !os.IsNotExist(err) {
-			fmt.Printf("Provider already exists in '%s' directory! Use '--force' to reinstall\n", provider.InstallationPath())
+			if viper.GetBool("debug") {
+				log.Printf("Provider already installed in '%s' directory\n", provider.InstallationPath())
+			}
+			fmt.Printf("%s is already installed! Use '--force' to reinstall\n", provider)
 			return nil
 		}
 	}
@@ -54,7 +68,6 @@ func downloadProvider(provider *terraform.Provider) (filename string, err error)
 	}
 
 	// Get Download URL
-	registry := terraform.NewRegistry(viper.GetString("terraform_registry"))
 	pkg, err := registry.GetPackage(provider)
 	if err != nil {
 		return
