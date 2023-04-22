@@ -2,7 +2,9 @@
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-Terraform Provider Manager (`tpm`) is a command-line interface (CLI) tool designed to simplify the management of [Terraform](https://www.terraform.io/) providers in the [plugin cache directory](https://developer.hashicorp.com/terraform/cli/config/config-file#provider-plugin-cache). With `tpm` you can easily **install, uninstall, and list providers**, helping you to streamline your Terraform workflow. One of the key benefits of `tpm` is that it **does not require Terraform to be installed**, making it a lightweight and efficient tool for managing your cached providers.
+Terraform Provider Manager (`tpm`) is a command-line interface (CLI) tool designed to simplify the management of [Terraform](https://www.terraform.io/) providers in the [plugin cache directory](https://developer.hashicorp.com/terraform/cli/config/config-file#provider-plugin-cache). With `tpm` you can easily **install, uninstall, and list providers**, helping you to streamline your Terraform workflow.
+
+One of the key benefits of `tpm` is that it **does not require Terraform to be installed**, making it a lightweight and efficient tool for managing your cached providers.
 
 <img alt="Terraform Provider Manager Demo" src="docs/gif/demo.gif"/>
 
@@ -76,6 +78,30 @@ Flags:
 
 Use "tpm [command] --help" for more information about a command.
 ```
+
+### Install a provider
+
+To install a provider you only need to provide the name. Optionally, you can specify a version by using `<package>@<version>`. By default, if no version is specified, the latest avaiable version, also known as `@latest`, will be installed.
+
+You can also specify the architecture and operating system. If not specified, the information from the system where tpm is being executed will be used.
+
+<img alt="Install a provider" src="docs/gif/install.gif"/>
+
+### List installed providers
+
+<img alt="List installed providers" src="docs/gif/list.gif"/>
+
+### Uninstall a provider
+
+Uninstalling a provider is exactly the same as installing it. You can specify both the version, operating system, and architecture.
+
+<img alt="Uninstall a provider" src="docs/gif/uninstall.gif"/>
+
+### Purge all providers
+
+This will delete all installed providers from the current registry.
+
+<img alt="List installed providers" src="docs/gif/purge.gif"/>
 
 ## Useful Links
 
