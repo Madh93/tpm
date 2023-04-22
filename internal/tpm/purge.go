@@ -23,7 +23,10 @@ func Purge() (err error) {
 
 	// Check provider already exists
 	if _, err = os.Stat(registryPath); os.IsNotExist(err) {
-		fmt.Printf("Registry path under '%s' does not exist! Ignoring...\n", registryPath)
+		if viper.GetBool("debug") {
+			log.Printf("Registry path under '%s' does not exist! Ignoring...\n", registryPath)
+		}
+		fmt.Printf("No installed providers from '%s' registry! Ignoring...\n", viper.GetString("terraform_registry"))
 		return nil
 	}
 
