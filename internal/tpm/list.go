@@ -2,16 +2,20 @@ package tpm
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
+	"github.com/Madh93/tpm/internal/formatter"
 	"github.com/Madh93/tpm/internal/pathutils"
 	"github.com/Madh93/tpm/internal/terraform"
 	"github.com/spf13/viper"
 )
 
 func List() (err error) {
-	fmt.Printf("Providers installed from '%s' registry: \n\n", viper.GetString("terraform_registry"))
+	if viper.GetBool("debug") {
+		log.Printf("Listing providers installed from '%s' registry\n", viper.GetString("terraform_registry"))
+	}
 
 	// Find providers
 	providers, err := findProviders()
@@ -19,10 +23,19 @@ func List() (err error) {
 		return
 	}
 
-	// List providers
-	for _, provider := range providers {
-		fmt.Println(provider)
+	// Setup output formatter
+	formatter, err := formatter.NewFormatter(viper.GetString("output"))
+	if err != nil {
+		return
 	}
+
+	// Show output
+	output, err := formatter.Format(providers)
+	if err != nil {
+		return
+	}
+
+	fmt.Print(string(output))
 
 	return nil
 }
@@ -35,7 +48,6 @@ func findProviders() (providers []*terraform.Provider, err error) {
 
 	// Check registry path exists
 	if _, err = os.Stat(registryPath); os.IsNotExist(err) {
-		fmt.Println("No packages found.")
 		return nil, nil
 	}
 

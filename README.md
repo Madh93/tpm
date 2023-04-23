@@ -89,6 +89,13 @@ You can also specify the architecture and operating system. If not specified, th
 
 ### List installed providers
 
+This will display on the screen the installed providers. Optionally, you can specify an output format. Valid output formats are:
+
+- `text` (default)
+- `json`
+- `csv`
+- `table`
+
 <img alt="List installed providers" src="docs/gif/list.gif"/>
 
 ### Uninstall a provider

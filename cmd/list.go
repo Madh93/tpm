@@ -21,4 +21,8 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+
+	// Local Flags
+	listCmd.Flags().StringP("output", "o", "text", "output in text, json, csv or table format")
+	listCmd.Flags().VisitAll(bindCustomFlag)
 }

@@ -1,6 +1,7 @@
 package terraform
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -135,4 +136,24 @@ func (p Provider) InstallationPath() string {
 		p.name.version,
 		fmt.Sprintf("%s_%s", p.operatingSystem, p.architecture),
 	)
+}
+
+func (p *Provider) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Namespace       string `json:"namespace"`
+		ProviderType    string `json:"name"`
+		Version         string `json:"version"`
+		OperatingSystem string `json:"os"`
+		Architecture    string `json:"arch"`
+	}{
+		Namespace:       p.Namespace(),
+		ProviderType:    p.ProviderType(),
+		Version:         p.Version(),
+		OperatingSystem: p.OperatingSystem(),
+		Architecture:    p.Architecture(),
+	})
+}
+
+func (p *Provider) ToOutputRow() []string {
+	return []string{p.Namespace(), p.ProviderType(), p.Version(), p.OperatingSystem(), p.Architecture()}
 }
