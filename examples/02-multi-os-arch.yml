@@ -1,0 +1,13 @@
+providers:
+  - name: hashicorp/null@latest
+    os:
+      - windows
+    arch:
+      - amd64
+  - name: hashicorp/random
+    os:
+      - linux
+      - darwin
+    arch:
+      - amd64
+      - arm64

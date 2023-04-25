@@ -8,9 +8,36 @@ import (
 	"os"
 
 	"github.com/Madh93/tpm/internal/compression"
+	"github.com/Madh93/tpm/internal/parser"
 	"github.com/Madh93/tpm/internal/terraform"
 	"github.com/spf13/viper"
 )
+
+func ParseProvidersFromFile(filename string) (providers []*terraform.Provider, err error) {
+	if viper.GetBool("debug") {
+		log.Printf("Reading '%s' providers file \n", filename)
+	}
+
+	// Setup input parser
+	parser, err := parser.NewParser(filename)
+	if err != nil {
+		return
+	}
+
+	// Read file
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return
+	}
+
+	// Parse providers
+	providers, err = parser.Parse(data)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 func Install(provider *terraform.Provider, force bool) (err error) {
 	fmt.Printf("Installing %s...\n", provider)

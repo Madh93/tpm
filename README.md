@@ -87,6 +87,22 @@ You can also specify the architecture and operating system. If not specified, th
 
 <img alt="Install a provider" src="docs/gif/install.gif"/>
 
+In addition, it's possible to install multiple providers at once specifying a `providers.yml` file, making it easier to share and reuse installation requirements. For example:
+
+```yaml
+providers:
+  - name: hashicorp/aws@3.64.0
+  - name: hashicorp/random
+    os:
+      - linux
+      - darwin
+    arch:
+      - amd64
+      - arm64
+```
+
+<img alt="Install providers from file" src="docs/gif/install-from-file.gif"/>
+
 ### List installed providers
 
 This will display on the screen the installed providers. Optionally, you can specify an output format. Valid output formats are:
@@ -118,7 +134,6 @@ This will delete all installed providers from the current registry.
 - [Terraform Provider Plugin Cache Docs](https://developer.hashicorp.com/terraform/cli/config/config-file#provider-plugin-cache)
 - [Terraform plugin caching](https://www.scalefactory.com/blog/2021/02/25/terraform-plugin-caching/)
 - [How to Speed Up Terraform in CI/CD Pipelines](https://infinitelambda.com/speed-up-terraform-cicd-pipeline/)
-
 
 ## License
 

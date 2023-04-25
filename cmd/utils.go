@@ -16,6 +16,11 @@ func bindCustomFlag(flag *pflag.Flag) {
 	viper.BindPFlag(name, flag)
 }
 
+func getStringFlag(cmd *cobra.Command, flag string) (value string) {
+	value, _ = cmd.Flags().GetString(flag)
+	return
+}
+
 func getStringSliceFlag(cmd *cobra.Command, flag string) (value []string) {
 	value, _ = cmd.Flags().GetStringSlice(flag)
 	return

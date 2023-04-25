@@ -1,0 +1,4 @@
+providers:
+  - name: hashicorp/http@3.2.1
+  - name: hashicorp/null@latest
+  - name: hashicorp/random
