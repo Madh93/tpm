@@ -16,7 +16,7 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:     "tpm",
-	Version: "0.2.0",
+	Version: "0.3.0",
 	Short:   "Terraform Provider Manager",
 	Long:    "Terraform Provider Manager is a simple CLI to manage Terraform providers in the Terraform plugin cache directory",
 	Run: func(cmd *cobra.Command, args []string) {
