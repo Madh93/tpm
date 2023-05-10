@@ -36,6 +36,16 @@ changelog:
       - '^docs:'
       - '^test:'
 
+brews:
+  - name: tpm
+    homepage: "https://github.com/Madh93/tpm"
+    description: "A package manager for Terraform providers"
+    license: "MIT"
+    commit_msg_template: "feat({{ .ProjectName }}): Brew formula update to version {{ .Tag }}"
+    tap:
+      owner: Madh93
+      name: homebrew-tap
+
 release:
   github:
     owner: Madh93
