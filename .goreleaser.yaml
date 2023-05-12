@@ -46,6 +46,15 @@ brews:
       owner: Madh93
       name: homebrew-tap
 
+scoops:
+  - bucket:
+      owner: Madh93
+      name: scoop-bucket
+    homepage: "https://github.com/Madh93/tpm"
+    description: "A package manager for Terraform providers"
+    license: "MIT"
+    commit_msg_template: "feat({{ .ProjectName }}): Scoop update to version {{ .Tag }}"
+
 release:
   github:
     owner: Madh93
