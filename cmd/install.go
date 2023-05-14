@@ -5,9 +5,11 @@ import (
 	"log"
 	"runtime"
 
+	"github.com/Madh93/tpm/cmd/tui"
 	"github.com/Madh93/tpm/internal/terraform"
 	"github.com/Madh93/tpm/internal/tpm"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var installCmd = &cobra.Command{
@@ -25,9 +27,11 @@ var installCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
+		viper.Set("force", getBoolFlag(cmd, "force"))
 		var providers []*terraform.Provider
 		var err error
 
+		// Parse providers to install
 		if getStringFlag(cmd, "from-file") != "" {
 			providers, err = tpm.ParseProvidersFromFile(getStringFlag(cmd, "from-file"))
 			if err != nil {
@@ -46,11 +50,9 @@ var installCmd = &cobra.Command{
 		}
 
 		// Install providers
-		for _, provider := range providers {
-			err := tpm.Install(provider, getBoolFlag(cmd, "force"))
-			if err != nil {
-				log.Fatal("Error: ", err)
-			}
+		err = tui.RunInstaller(providers)
+		if err != nil {
+			log.Fatal("Error: ", err)
 		}
 	},
 }

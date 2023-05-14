@@ -4,8 +4,8 @@ import (
 	"log"
 	"runtime"
 
+	"github.com/Madh93/tpm/cmd/tui"
 	"github.com/Madh93/tpm/internal/terraform"
-	"github.com/Madh93/tpm/internal/tpm"
 	"github.com/spf13/cobra"
 )
 
@@ -29,11 +29,9 @@ var uninstallCmd = &cobra.Command{
 		}
 
 		// Uninstall providers
-		for _, provider := range providers {
-			err := tpm.Uninstall(provider)
-			if err != nil {
-				log.Fatal("Error: ", err)
-			}
+		err := tui.RunUninstaller(providers)
+		if err != nil {
+			log.Fatal("Error: ", err)
 		}
 	},
 }

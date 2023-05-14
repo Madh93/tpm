@@ -1,7 +1,6 @@
 package tpm
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -40,7 +39,9 @@ func ParseProvidersFromFile(filename string) (providers []*terraform.Provider, e
 }
 
 func Install(provider *terraform.Provider, force bool) (err error) {
-	fmt.Printf("Installing %s...\n", provider)
+	if viper.GetBool("debug") {
+		log.Printf("Installing %s...\n", provider)
+	}
 
 	// Setup registry
 	registry = terraform.NewRegistry(viper.GetString("terraform_registry"))
@@ -57,9 +58,8 @@ func Install(provider *terraform.Provider, force bool) (err error) {
 	if !force {
 		if _, err = os.Stat(provider.InstallationPath()); !os.IsNotExist(err) {
 			if viper.GetBool("debug") {
-				log.Printf("Provider already installed in '%s' directory\n", provider.InstallationPath())
+				log.Printf("Provider already installed in '%s' directory. Use '--force' to reinstall\n", provider.InstallationPath())
 			}
-			fmt.Printf("%s is already installed! Use '--force' to reinstall\n", provider)
 			return nil
 		}
 	}
@@ -76,14 +76,10 @@ func Install(provider *terraform.Provider, force bool) (err error) {
 		return
 	}
 
-	fmt.Printf("%s has been installed sucessfully!\n", provider)
-
 	return nil
 }
 
 func downloadProvider(provider *terraform.Provider) (filename string, err error) {
-	fmt.Println("Downloading...")
-
 	// Create Temporary file
 	file, err := os.CreateTemp("", "")
 	if err != nil {
@@ -125,8 +121,6 @@ func downloadProvider(provider *terraform.Provider) (filename string, err error)
 }
 
 func extractProvider(provider *terraform.Provider, filename string) (err error) {
-	fmt.Println("Extracting...")
-
 	destinationDir := provider.InstallationPath()
 
 	if viper.GetBool("debug") {

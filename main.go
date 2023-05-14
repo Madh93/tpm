@@ -7,6 +7,6 @@ import (
 )
 
 func main() {
-	log.SetFlags(0)
+	log.SetFlags(log.Default().Flags())
 	cmd.Execute()
 }

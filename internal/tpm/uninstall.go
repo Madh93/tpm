@@ -10,7 +10,9 @@ import (
 )
 
 func Uninstall(provider *terraform.Provider) (err error) {
-	fmt.Printf("Uninstalling %s...\n", provider)
+	if viper.GetBool("debug") {
+		log.Printf("Uninstalling %s...\n", provider)
+	}
 
 	// Setup registry
 	registry = terraform.NewRegistry(viper.GetString("terraform_registry"))
@@ -30,8 +32,7 @@ func Uninstall(provider *terraform.Provider) (err error) {
 
 	// Check provider already exists
 	if _, err = os.Stat(installationPath); os.IsNotExist(err) {
-		fmt.Printf("%s is not installed! Ignoring...\n", provider)
-		return nil
+		return fmt.Errorf("provider is not installed")
 	}
 
 	// Remove provider
@@ -40,7 +41,9 @@ func Uninstall(provider *terraform.Provider) (err error) {
 		return
 	}
 
-	fmt.Printf("%s has been uninstalled sucessfully!\n", provider)
+	if viper.GetBool("debug") {
+		log.Printf("%s has been uninstalled sucessfully!\n", provider)
+	}
 
 	return nil
 }
