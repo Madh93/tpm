@@ -17,39 +17,40 @@ One of the key benefits of `tpm` is that it **does not require Terraform to be i
 
 ## Installation
 
+### GNU/Linux
+
+Arch Linux users from [AUR](https://aur.archlinux.org/packages/terraform-tpm-bin) (maintained by [@jonathanio](https://github.com/jonathanio)):
+
+```shell
+yay -S terraform-tpm-bin
+```
+
 ### From releases
 
-Stable binaries are available on the [releases page](https://github.com/Madh93/tpm/releases). To install, download the binary for your platform from "Assets", extract the downloaded file and place `tpm` into your `PATH`:
+Stable binaries for all platforms are available on the [releases page](https://github.com/Madh93/tpm/releases). To install, download the binary for your platform from "Assets", extract the downloaded file and place `tpm` into your `PATH`:
 
 ```shell
 curl -L https://github.com/Madh93/tpm/releases/latest/download/tpm_$(uname -s)_$(uname -m).tar.gz | tar -xz -O tpm > /usr/local/bin/tpm
 chmod +x /usr/local/bin/tpm
 ```
 
+### Go
+
+If you have Go installed:
+
+```shell
+go install github.com/Madh93/tpm@latest
+```
+
 ### From source
 
 Install Go if it is not already installed. You can download it from the official [website](https://golang.org/dl).
 
-Clone the Terraform Provider Manager repository:
+Clone the Terraform Provider Manager repository to build and install the binary:
 
 ```shell
-git clone https://github.com/Madh93/tpm
-cd tpm
+git clone https://github.com/Madh93/tpm && cd tpm && make install
 ```
-
-Build the binary:
-
-```shell
-go build -o tpm
-```
-
-Move the binary to a directory in your `PATH`:
-
-```shell
-mv tpm /usr/local/bin/
-```
-
-This will allow you to run `tpm` from any directory in your terminal.
 
 ## Usage
 
