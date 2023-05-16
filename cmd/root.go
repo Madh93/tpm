@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -64,7 +65,7 @@ func init() {
 	if configuredCacheDir != "" {
 		cacheDir = configuredCacheDir
 	}
-	cacheDir = os.ExpandEnv(cacheDir)
+	cacheDir = filepath.Clean(os.ExpandEnv(cacheDir))
 
 	// Global Flags
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file for tpm")
