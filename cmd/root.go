@@ -3,11 +3,13 @@ package cmd
 import (
 	"log"
 	"os"
+	"io/ioutil"
 	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/hashicorp/hcl"
 )
 
 var (
@@ -29,13 +31,46 @@ func Execute() {
 	rootCmd.Execute()
 }
 
+func getCacheDirFromTFConfig() (string, error) {
+	tfCfgPath, ok := os.LookupEnv("TF_CLI_CONFIG_FILE")
+	if !ok {
+		// The file not existing is not an error
+		return "", nil
+	}
+
+	data, err := ioutil.ReadFile(tfCfgPath)
+	if err != nil {
+		return "", err
+	}
+
+	var cfg struct{
+		PluginCacheDir string `hcl:"plugin_cache_dir"`
+	}
+	err = hcl.Unmarshal(data, &cfg)
+	if err != nil {
+		return "", err
+	}
+
+	return cfg.PluginCacheDir, nil
+}
+
 func init() {
 	cobra.OnInitialize(initConfig)
+
+	cacheDir := "$HOME/.terraform.d/plugin-cache"
+	configuredCacheDir, err := getCacheDirFromTFConfig()
+	if err != nil {
+		log.Println("Could not read plugin cache directory from tfrc file, ignoring", err)
+	}
+	if configuredCacheDir != "" {
+		cacheDir = configuredCacheDir
+	}
+	cacheDir = filepath.Clean(os.ExpandEnv(cacheDir))
 
 	// Global Flags
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file for tpm")
 	rootCmd.PersistentFlags().BoolP("debug", "d", false, "enable debug mode")
-	rootCmd.PersistentFlags().StringP("terraform-plugin-cache-dir", "p", filepath.Join(os.ExpandEnv("$HOME"), "/.terraform.d/plugin-cache"), "the location of the Terraform plugin cache directory")
+	rootCmd.PersistentFlags().StringP("terraform-plugin-cache-dir", "p", cacheDir, "the location of the Terraform plugin cache directory")
 	rootCmd.PersistentFlags().StringP("terraform-registry", "r", "registry.terraform.io", "the Terraform registry provider hostname")
 	rootCmd.PersistentFlags().VisitAll(bindCustomFlag)
 }
