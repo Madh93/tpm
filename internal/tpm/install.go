@@ -35,6 +35,9 @@ func ParseProvidersFromFile(filename string) (providers []*terraform.Provider, e
 		return
 	}
 
+	// Remove duplicates
+	providers = removeDuplicatedProviders(providers)
+
 	return
 }
 

@@ -20,3 +20,17 @@ func setLatestProviderVersion(provider *terraform.Provider) (err error) {
 
 	return nil
 }
+
+func removeDuplicatedProviders(providers []*terraform.Provider) []*terraform.Provider {
+	found := map[string]bool{}
+	result := []*terraform.Provider{}
+
+	for _, provider := range providers {
+		if !found[provider.String()] {
+			found[provider.String()] = true
+			result = append(result, provider)
+		}
+	}
+
+	return result
+}
