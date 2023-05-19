@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	"github.com/Madh93/tpm/cmd/tui"
+	"github.com/Madh93/tpm/internal/mathutils"
 	"github.com/Madh93/tpm/internal/terraform"
 	"github.com/Madh93/tpm/internal/tpm"
 	"github.com/spf13/cobra"
@@ -28,6 +29,7 @@ var installCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		viper.Set("force", getBoolFlag(cmd, "force"))
+		viper.Set("jobs", mathutils.Max(1, getIntFlag(cmd, "jobs")))
 		var providers []*terraform.Provider
 		var err error
 
@@ -63,6 +65,7 @@ func init() {
 	// Local Flags
 	installCmd.Flags().Bool("force", false, "forces the installation of the provider even if it already exists")
 	installCmd.Flags().StringP("from-file", "f", "", "installs providers defined in a 'providers.yml' file")
+	installCmd.Flags().IntP("jobs", "j", 4, "specifies maximum number of concurrent providers to install")
 	installCmd.Flags().StringSliceP("os", "o", []string{runtime.GOOS}, "terraform provider operating system")
 	installCmd.Flags().StringSliceP("arch", "a", []string{runtime.GOARCH}, "terraform provider architecture")
 }

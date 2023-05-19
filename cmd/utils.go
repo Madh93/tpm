@@ -30,3 +30,8 @@ func getBoolFlag(cmd *cobra.Command, flag string) (value bool) {
 	value, _ = cmd.Flags().GetBool(flag)
 	return
 }
+
+func getIntFlag(cmd *cobra.Command, flag string) (value int) {
+	value, _ = cmd.Flags().GetInt(flag)
+	return
+}

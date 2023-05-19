@@ -7,6 +7,7 @@ import (
 	"github.com/Madh93/tpm/cmd/tui"
 	"github.com/Madh93/tpm/internal/terraform"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var uninstallCmd = &cobra.Command{
@@ -16,6 +17,7 @@ var uninstallCmd = &cobra.Command{
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		var providers []*terraform.Provider
+		viper.Set("jobs", 1)
 
 		// Get providers to uninstall
 		for _, os := range getStringSliceFlag(cmd, "os") {
