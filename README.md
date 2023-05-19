@@ -19,10 +19,27 @@ One of the key benefits of `tpm` is that it **does not require Terraform to be i
 
 ### GNU/Linux
 
-Arch Linux users from [AUR](https://aur.archlinux.org/packages/terraform-tpm-bin) (maintained by [@jonathanio](https://github.com/jonathanio)):
+Arch Linux from [AUR](https://aur.archlinux.org/packages/terraform-tpm-bin) (maintained by [@jonathanio](https://github.com/jonathanio)):
 
 ```shell
 yay -S terraform-tpm-bin
+```
+
+### macOS
+
+Via [Homebrew](https://brew.sh/):
+
+```shell
+brew install madh93/tap/tpm
+```
+
+### Windows
+
+Via [Scoop](https://scoop.sh/):
+
+```shell
+scoop bucket add madh93 https://github.com/madh93/scoop-bucket.git
+scoop install tpm
 ```
 
 ### From releases
