@@ -1,15 +1,15 @@
 package cmd
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
-	"io/ioutil"
 	"path/filepath"
 	"strings"
 
+	"github.com/hashicorp/hcl"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/hashicorp/hcl"
 )
 
 var (
@@ -18,7 +18,7 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:     "tpm",
-	Version: "0.3.0",
+	Version: "0.4.0",
 	Short:   "Terraform Provider Manager",
 	Long:    "Terraform Provider Manager is a simple CLI to manage Terraform providers in the Terraform plugin cache directory",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -43,7 +43,7 @@ func getCacheDirFromTFConfig() (string, error) {
 		return "", err
 	}
 
-	var cfg struct{
+	var cfg struct {
 		PluginCacheDir string `hcl:"plugin_cache_dir"`
 	}
 	err = hcl.Unmarshal(data, &cfg)
