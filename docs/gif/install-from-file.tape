@@ -2,7 +2,7 @@ Output install-from-file.gif
 
 Set FontSize 20
 Set Width 1200
-Set Height 600
+Set Height 400
 
 Type "tpm install --from-file examples/01-basic.yml"
 Sleep 500ms

@@ -82,7 +82,7 @@ Use "tpm [command] --help" for more information about a command.
 
 ### Install a provider
 
-To install a provider you only need to provide the name. Optionally, you can specify a version by using `<package>@<version>`. By default, if no version is specified, the latest avaiable version, also known as `@latest`, will be installed.
+To install a provider you only need to provide the name. Optionally, you can specify a version by using `<package>@<version>`. By default, if no version is specified, the latest available version, also known as `@latest`, will be installed.
 
 You can also specify the architecture and operating system. If not specified, the information from the system where tpm is being executed will be used.
 
@@ -93,6 +93,13 @@ In addition, it's possible to install multiple providers at once specifying a `p
 ```yaml
 providers:
   - name: hashicorp/aws@3.64.0
+  - name: hashicorp/http@3.3.0
+    os:
+      - linux
+      - darwin
+    arch:
+      - amd64
+      - arm64
   - name: hashicorp/random
     os:
       - linux
@@ -103,6 +110,8 @@ providers:
 ```
 
 <img alt="Install providers from file" src="docs/gif/install-from-file.gif"/>
+
+The providers are installed in parallel by default. You can adjust the number of parallel jobs by using the `--jobs <NUMBER>` flag.
 
 ### List installed providers
 

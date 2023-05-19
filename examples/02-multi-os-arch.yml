@@ -4,6 +4,13 @@ providers:
       - windows
     arch:
       - amd64
+  - name: hashicorp/http@3.3.0
+    os:
+      - linux
+      - darwin
+    arch:
+      - amd64
+      - arm64
   - name: hashicorp/random
     os:
       - linux

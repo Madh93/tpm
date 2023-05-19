@@ -2,12 +2,12 @@ Output install.gif
 
 Set FontSize 20
 Set Width 1200
-Set Height 600
+Set Height 350
 
 Type "tpm install hashicorp/aws"
 Sleep 500ms
 Enter
-Sleep 8s
+Sleep 5s
 
 Ctrl+L
 Type "tpm install hashicorp/aws@latest"

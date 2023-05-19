@@ -2,7 +2,7 @@ Output uninstall.gif
 
 Set FontSize 20
 Set Width 1200
-Set Height 600
+Set Height 300
 
 Type "tpm uninstall hashicorp/aws"
 Sleep 500ms
