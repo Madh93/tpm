@@ -1,0 +1,7 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/go:1-1.23-bookworm
+    container_name: devcontainer_tpm
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
