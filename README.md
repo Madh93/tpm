@@ -66,7 +66,7 @@ Install Go if it is not already installed. You can download it from the official
 Clone the Terraform Provider Manager repository to build and install the binary:
 
 ```shell
-git clone https://github.com/Madh93/tpm && cd tpm && make install
+git clone https://github.com/Madh93/tpm && cd tpm && task install
 ```
 
 ## Usage

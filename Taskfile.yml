@@ -1,0 +1,61 @@
+version: "3"
+
+vars:
+  APP_NAME: tpm
+  APP_VERSION:
+    sh: git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0"
+  COMMIT_HASH:
+    sh: git rev-parse HEAD
+  LD_FLAG_VERSION: "-X github.com/Madh93/tpm/internal/version.appVersion={{.APP_VERSION}}"
+  LD_FLAG_COMMIT: "-X github.com/Madh93/tpm/internal/version.commitHash={{.COMMIT_HASH}}"
+
+env:
+  GCO_ENABLED: 0
+
+tasks:
+  default:
+    desc: "Build and run"
+    cmds:
+      - task update-dependencies
+      - task build
+      - task install
+
+  clean:
+    desc: "Clean build artifacts"
+    cmds:
+      - go clean
+      - rm -rf bin
+
+  install:
+    desc: "Install the application"
+    cmds:
+      - go install -trimpath -ldflags "-s -w {{.LD_FLAG_VERSION}} {{.LD_FLAG_COMMIT}}"
+
+  test:
+    desc: "Run tests"
+    cmds:
+      - go test ./...
+
+  lint:
+    desc: "Run linters"
+    cmds:
+      - golangci-lint run
+
+  update-dependencies:
+    desc: "Update dependencies"
+    cmds:
+      - go get -u all && go mod tidy
+
+  #############
+  ### BUILD ###
+  #############
+
+  build:
+    desc: "Build the application"
+    cmds:
+      - go build -trimpath -ldflags "-s -w {{.LD_FLAG_VERSION}} {{.LD_FLAG_COMMIT}}" -o bin/{{.APP_NAME}} main.go
+
+  build:debug:
+    desc: "Build the application for debug mode"
+    cmds:
+      - go build -ldflags "{{.LD_FLAG_VERSION}} {{.LD_FLAG_COMMIT}}" -gcflags=all="-N -l" -o bin/{{.APP_NAME}}-debug main.go
